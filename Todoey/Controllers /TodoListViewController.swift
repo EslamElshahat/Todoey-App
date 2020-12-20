@@ -86,11 +86,16 @@ class TodoListViewController: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
-        
         let item = itemArray[indexPath.row]
+        
+        
+      
+        
+        
         //        let itemTitle  = item.done ? "*" + (item.title)!  + "*" : item.title
         cell.textLabel?.text = item.title
-        cell.detailTextLabel?.text = (item.color)!  + " - " + (item.date)!
+//        cell.detailTextLabel?.text = (item.color)!  + " - " + (item.date)!
+        cell.detailTextLabel?.text = (item.color)!  + " - "
         //        cell.textLabel?.text = item.color
         cell.accessoryType = item.done ? .checkmark : .none
         //        if item.done == true {
@@ -121,10 +126,8 @@ class TodoListViewController: UITableViewController {
             let item = self.itemArray[indexPath.row]
             
             let vc =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EditItemViewController") as? EditItemViewController
-            vc?.iName = item.title!
-            vc?.color = item.color!
-            vc?.dName = item.date!
-            vc?.cName = item.parentCategory?.name!
+//            vc?.iName = item.title!
+            vc?.FmItem = item
             self.navigationController?.pushViewController(vc!, animated: true)
             //            let next = self.storyboard?.instantiateViewController(withIdentifier: "EditItemViewController") as! EditItemViewController
             //            self.present(next,animated: true,completion: nil)

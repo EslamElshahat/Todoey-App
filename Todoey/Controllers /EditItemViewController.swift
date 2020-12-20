@@ -10,12 +10,9 @@ import Foundation
 import UIKit
 import CoreData
 
-class EditItemViewController: UIViewController,UITextFieldDelegate{
+class EditItemViewController: UIViewController,UITextFieldDelegate {
     
-    var iName: String?
-    var cName: String?
-    var dName: String?
-    var color: String?
+    var FmItem: Item?
     
     @IBOutlet weak var itemName: UITextField!
     @IBOutlet weak var CategoryName: UITextField!
@@ -31,18 +28,91 @@ class EditItemViewController: UIViewController,UITextFieldDelegate{
     var selectedCategory: Category?
     var date: String?
     var selectedColor: String?
-    var strDate: String?
+    var strDate: Date?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadCategories()
+        print(FmItem?.date)
+//        let dateFormatter = ISO8601DateFormatter()
+//        let date = dateFormatter.date(from:(FmItem?.date)!)!
+//        datePicker.date = FmItem?.date! ?? Date
         
-//                let item = Item()
-//                iName = item.title!
-////                color = item.color!
-////                dName = item.date!
-////                cName = item.parentCategory?.name!
-//                self.saveItems()
+        itemName.text = FmItem?.title!
+        CategoryName.text = FmItem?.parentCategory?.name
+        
+        pickerView.delegate = self
+//        CategoryName.inputView = pickerView
+//        if FmItem?.color == "Red" {
+//            radioController.buttonsArray = [Red,Green,Blue]
+//            radioController.defaultButton = Red
+//        } else if FmItem?.color == "Green" {
+//            radioController.buttonsArray = [Red,Green,Blue]
+//            radioController.defaultButton = Green
+//        } else {
+//            radioController.buttonsArray = [Red,Green,Blue]
+//            radioController.defaultButton = Blue
+//        }
+//////        item.date = dName!
+        
+        self.saveItems()
     }
+    
+    func loadCategories(){
+        let request: NSFetchRequest<Category> = Category.fetchRequest()
+        do{
+            categoriesDB = try context.fetch(request)
+            //            for category in categoriesDB {
+            //                categories.append(category)
+            //            }
+        }catch{
+            print("Error")
+        }
+    }
+    
+    @IBAction func datePickerChanged(_ sender: Any) {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateStyle = DateFormatter.Style.short
+        dateFormatter.timeStyle = DateFormatter.Style.short
+        
+        self.strDate = datePicker.date
+        //        print(strDate)
+    }
+    
+    @IBAction func btnRedAction(_ sender: UIButton) {
+        radioController.buttonArrayUpdated(buttonSelected: sender)
+        selectedColor = "Red"
+        
+        //        print(selectedColor)
+    }
+    @IBAction func btnGreenAction(_ sender: UIButton) {
+        radioController.buttonArrayUpdated(buttonSelected: sender)
+        selectedColor = "Green"
+        //        print(selectedColor)
+    }
+    @IBAction func btnBlueAction(_ sender: UIButton) {
+        radioController.buttonArrayUpdated(buttonSelected: sender)
+        selectedColor = "Blue"
+        //        print(selectedColor)
+    }
+    
+    @IBAction func saveEdit(_ sender: UIButton) {
+//        let editItem = Item(context: self.context)
+
+//        print(editItem)
+        FmItem!.title = itemName?.text!
+        FmItem!.parentCategory? = selectedCategory!
+        FmItem!.color = selectedColor!
+        FmItem!.date = strDate!
+        FmItem!.done = false
+        do{
+            try context.save()
+        }catch{
+            print("Error")
+        }
+    }
+    
     
     func saveItems(){
         //        let encoder  = PropertyListEncoder()
@@ -56,24 +126,52 @@ class EditItemViewController: UIViewController,UITextFieldDelegate{
             print("Error")
         }
     }
-    //    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
-    //
-    //        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-    //
-    //        if let addtionalPredicate = predicate {
-    //            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, addtionalPredicate])
-    //        } else {
-    //            request.predicate = categoryPredicate
-    //        }
-    //
-    //
-    //        do {
-    //            itemArray = try context.fetch(request)
-    //        } catch {
-    //            print("Error fetching data from context \(error)")
-    //        }
-    //
-    //        tableView.reloadData()
-    //
-    //    }
+}
+
+extension EditItemViewController: UIPickerViewDelegate,UIPickerViewDataSource{
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return categoriesDB.count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return categoriesDB[row].name
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.selectedCategory = categoriesDB[row]
+        self.CategoryName.text = categoriesDB[row].name
+        self.view.endEditing(true)
+        pickerView.isHidden = true
+    }
+    
+}
+
+class EditRadioButtonController: NSObject {
+    var buttonsArray: [UIButton]! {
+        didSet {
+            for b in buttonsArray {
+                b.setImage(UIImage(named: "unchecked-radio"), for: .normal)
+                b.setImage(UIImage(named: "checked-radio"), for: .selected)
+            }
+        }
+    }
+    var selectedButton: UIButton?
+    var defaultButton: UIButton = UIButton() {
+        didSet {
+            buttonArrayUpdated(buttonSelected: self.defaultButton)
+        }
+    }
+    
+    func buttonArrayUpdated(buttonSelected: UIButton) {
+        for b in buttonsArray {
+            if b == buttonSelected {
+                selectedButton = b
+                b.isSelected = true
+            } else {
+                b.isSelected = false
+            }
+        }
+    }
 }

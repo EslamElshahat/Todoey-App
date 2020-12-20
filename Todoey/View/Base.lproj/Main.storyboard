@@ -314,7 +314,7 @@
             </objects>
             <point key="canvasLocation" x="-130" y="129"/>
         </scene>
-        <!--Create Item-->
+        <!--Edit Item-->
         <scene sceneID="XM6-3O-WQq">
             <objects>
                 <viewController storyboardIdentifier="EditItemViewController" id="bXh-JC-ug5" customClass="EditItemViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
@@ -350,6 +350,9 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="Bzv-S7-HwH"/>
                                 </constraints>
+                                <connections>
+                                    <action selector="datePickerChanged:" destination="bXh-JC-ug5" eventType="valueChanged" id="tXe-rl-Jna"/>
+                                </connections>
                             </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Color : " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K47-vq-ci1">
                                 <rect key="frame" x="20" y="472.5" width="54.5" height="25"/>
@@ -367,6 +370,9 @@
                                     <constraint firstAttribute="width" constant="20" id="boM-UZ-Cm0"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="unchecked radio"/>
+                                <connections>
+                                    <action selector="btnRedAction:" destination="bXh-JC-ug5" eventType="touchUpInside" id="rkd-gn-rcq"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lHe-MU-0XK" userLabel="Green">
                                 <rect key="frame" x="84.5" y="547.5" width="20" height="20"/>
@@ -374,10 +380,16 @@
                                     <constraint firstAttribute="height" constant="20" id="BVo-5v-svX"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="unchecked radio"/>
+                                <connections>
+                                    <action selector="btnGreenAction:" destination="bXh-JC-ug5" eventType="touchUpInside" id="4pW-K1-gwz"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Anl-ip-jNE" userLabel="Blue">
                                 <rect key="frame" x="84.5" y="587.5" width="20" height="20"/>
                                 <state key="normal" title="Button" image="unchecked radio"/>
+                                <connections>
+                                    <action selector="btnBlueAction:" destination="bXh-JC-ug5" eventType="touchUpInside" id="G9P-qE-czO"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Green" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EIj-ur-j7E">
                                 <rect key="frame" x="124.5" y="547.5" width="47" height="20"/>
@@ -403,9 +415,12 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="DBy-pT-tTW"/>
                                 </constraints>
-                                <state key="normal" title="Create">
+                                <state key="normal" title="Save">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="saveEdit:" destination="bXh-JC-ug5" eventType="touchUpInside" id="4Qu-O7-4UN"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kbh-zW-MxR">
                                 <rect key="frame" x="107.5" y="129" width="286.5" height="34"/>
@@ -459,7 +474,7 @@
                             <constraint firstItem="bdW-SL-kLv" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="EIj-ur-j7E" secondAttribute="trailing" symbolic="YES" id="yZJ-rZ-GBY"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Create Item" id="95v-uV-rez"/>
+                    <navigationItem key="navigationItem" title="Edit Item" id="95v-uV-rez"/>
                     <connections>
                         <outlet property="Blue" destination="Anl-ip-jNE" id="NMS-ET-OBG"/>
                         <outlet property="CategoryName" destination="Kbh-zW-MxR" id="ZL0-d7-JAT"/>
@@ -471,7 +486,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E1q-b0-9tP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3009" y="320"/>
+            <point key="canvasLocation" x="2438" y="419"/>
         </scene>
     </scenes>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

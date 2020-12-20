@@ -33,7 +33,7 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate {
     var selectedCategory: Category?
     var date: String?
     var selectedColor: String?
-    var strDate: String?
+    var strDate: Date?
     
     var isUpdated: Bool?
     
@@ -83,12 +83,12 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate {
     
     
     @IBAction func datePickerChanged(_ sender: Any) {
-        let dateFormatter = DateFormatter()
+        let dateFormatter = ISO8601DateFormatter()
         
-        dateFormatter.dateStyle = DateFormatter.Style.short
-        dateFormatter.timeStyle = DateFormatter.Style.short
+//        dateFormatter.dateStyle = DateFormatter.Style.short
+//        dateFormatter.timeStyle = DateFormatter.Style.short
         
-        self.strDate = dateFormatter.string(from: datePicker.date)
+        self.strDate = datePicker.date
         //        print(strDate)
     }
     //radios start
