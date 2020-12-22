@@ -49,17 +49,7 @@ class CategoryTableViewController: UITableViewController {
             vc!.selectedCategory = categories[indexPath.row]
         }
                 self.navigationController?.pushViewController(vc!, animated: true)
-        
-//        performSegue(withIdentifier: "goToItems", sender: self)
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let destinationVC = segue.destination as! TodoListViewController
-//
-//        if let indexPath = tableView.indexPathForSelectedRow {
-//            destinationVC.selectedCategory = categories[indexPath.row]
-//        }
-//    }
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
@@ -68,18 +58,13 @@ class CategoryTableViewController: UITableViewController {
             
             let newCategory = Category(context: self.context)
             newCategory.name = textField.text!
-            //            newItem.done = false
             self.categories.append(newCategory)
-            
             self.saveCategories()
-            //            print(self.itemArray)
-            //            self.defaults.set(self.itemArray, forKey: "TodoListArray")
             
         }
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Create New Category"
             textField = alertTextField
-            //            print(alertTextField.text)
         }
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
@@ -87,14 +72,9 @@ class CategoryTableViewController: UITableViewController {
     
     
     func saveCategories(){
-        //        let encoder  = PropertyListEncoder()
         do{
             try context.save()
-            
-            //            let data = try encoder.encode(itemArray)
-            //            try data.write(to: dataFilePath!)
         }catch{
-            
             print("Error")
         }
         self.tableView.reloadData()

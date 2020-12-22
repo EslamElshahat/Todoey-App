@@ -11,7 +11,6 @@ import CoreData
 
 class TodoListViewController: UITableViewController {
     
-    //    var _itemArray = ["Find Mike" , "Buy Eggs" , "Destroy Demon","jjk","Find Mike" , "Buy Eggs" , "Destroy Demon","jjk","Find Mike" , "Buy Eggs" , "Destroy Demon","jjk"]
     var itemArray = [Item]()
     var selectedCategory: Category? {
         didSet{
@@ -19,27 +18,19 @@ class TodoListViewController: UITableViewController {
         }
     }
     
-    //    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     let context = (UIApplication.shared.delegate as! AppDelegate    ).persistentContainer.viewContext
     
-    //    let defaults = UserDefaults.standard
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //                print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        
-        
         loadItems()
-        //                if let items = defaults.stringArray(forKey: "TodoListArray") as? [Item]{
-        //                    itemArray = items
-        //                }
+        
     }
     
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
-        
-//        print("\(selectedCategory?.name)")
+
         
         let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory?.name as! CVarArg)
         
@@ -62,12 +53,8 @@ class TodoListViewController: UITableViewController {
     }
     
     func saveItems(){
-        //        let encoder  = PropertyListEncoder()
         do{
             try context.save()
-            
-            //            let data = try encoder.encode(itemArray)
-            //            try data.write(to: dataFilePath!)
         }catch{
             
             print("Error")
@@ -87,68 +74,31 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         let item = itemArray[indexPath.row]
-        
-        
-      
-        
-        
-        //        let itemTitle  = item.done ? "*" + (item.title)!  + "*" : item.title
         cell.textLabel?.text = item.title
-//        cell.detailTextLabel?.text = (item.color)!  + " - " + (item.date)!
-        cell.detailTextLabel?.text = (item.color)!  + " - "
-        //        cell.textLabel?.text = item.color
+        
+        
+        let formatter1 = DateFormatter()
+        formatter1.dateStyle = .full
+        
+        cell.detailTextLabel?.text = (item.color)!  + " - " + formatter1.string(from: item.date!)
+
         cell.accessoryType = item.done ? .checkmark : .none
-        //        if item.done == true {
-        //            cell.accessoryType = .checkmark
-        //        }else{
-        //            cell.accessoryType = .none
-        //        }
+
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-        
         saveItems()
-        
         tableView.deselectRow(at: indexPath, animated: true)
-        //        performSegue(withIdentifier: "Edit", sender: self)
-        
-        //        self.navigationController?.popViewController(animated: true)
     }
     
     
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
         let edit = UIContextualAction(style: .normal, title:  "Edit", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            
-            
-            //            let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
             let item = self.itemArray[indexPath.row]
-            
             let vc =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EditItemViewController") as? EditItemViewController
-//            vc?.iName = item.title!
             vc?.FmItem = item
             self.navigationController?.pushViewController(vc!, animated: true)
-            //            let next = self.storyboard?.instantiateViewController(withIdentifier: "EditItemViewController") as! EditItemViewController
-            //            self.present(next,animated: true,completion: nil)
-            
-            //            let vc2 =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CreateItemViewController") as? CreateItemViewController
-            ////            vc?.isUpdated = false
-            //            self.navigationController?.pushViewController(vc2!, animated: true)
-            
-            //            self.performSegue(withIdentifier: "Edit", sender: self)
-            
-            
-            //            vc?.isUpdated = true
-            //
-            //
-            //            vc?.iName = item.title!
-            //            vc?.color = item.color!
-            //            vc?.dName = item.date!
-            //            vc?.cName = item.parentCategory?.name!
-            //            self.saveItems()
-            
-            //            self.navigationController?.pushViewController(vc!, animated: true)
             
         })
         return UISwipeActionsConfiguration(actions: [edit])
@@ -156,35 +106,9 @@ class TodoListViewController: UITableViewController {
     }
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        //        var textField = UITextField()
-        //        let alert = UIAlertController(title: "Add New Todo Item", message: "", preferredStyle: .alert)
-        //        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-        //
-        //            let newItem = Item(context: self.context)
-        //            newItem.title = textField.text!
-        //            newItem.done = false
-        //            newItem.parentCategory = self.selectedCategory
-        //            self.itemArray.append(newItem)
-        //
-        //            self.saveItems()
-        //            //            print(self.itemArray)
-        //            //            self.defaults.set(self.itemArray, forKey: "TodoListArray")
-        //
-        //        }
-        //        alert.addTextField { (alertTextField) in
-        //            alertTextField.placeholder = "Create New Item"
-        //            textField = alertTextField
-        //            //            print(alertTextField.text)
-        //        }
-        //        alert.addAction(action)
-        //        present(alert, animated: true, completion: nil)
-        
-        //        performSegue(withIdentifier: "createItem", sender: self)
-        
         let vc =  UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CreateItemViewController") as? CreateItemViewController
         vc?.isUpdated = false
         self.navigationController?.pushViewController(vc!, animated: true)
-        
         
     }
     
@@ -197,12 +121,6 @@ extension TodoListViewController: UISearchBarDelegate{
         let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         loadItems(with: request , predicate: predicate)
-        //        do{
-        //            itemArray = try context.fetch(request)
-        //        }catch{
-        //            print("Error")
-        //        }
-        //        tableView.reloadData()
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0{

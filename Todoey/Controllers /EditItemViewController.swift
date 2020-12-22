@@ -33,27 +33,24 @@ class EditItemViewController: UIViewController,UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCategories()
-        print(FmItem?.date)
-//        let dateFormatter = ISO8601DateFormatter()
-//        let date = dateFormatter.date(from:(FmItem?.date)!)!
-//        datePicker.date = FmItem?.date! ?? Date
+//
+        datePicker.date = (FmItem?.date!)! 
         
         itemName.text = FmItem?.title!
         CategoryName.text = FmItem?.parentCategory?.name
         
         pickerView.delegate = self
-//        CategoryName.inputView = pickerView
-//        if FmItem?.color == "Red" {
-//            radioController.buttonsArray = [Red,Green,Blue]
-//            radioController.defaultButton = Red
-//        } else if FmItem?.color == "Green" {
-//            radioController.buttonsArray = [Red,Green,Blue]
-//            radioController.defaultButton = Green
-//        } else {
-//            radioController.buttonsArray = [Red,Green,Blue]
-//            radioController.defaultButton = Blue
-//        }
-//////        item.date = dName!
+        CategoryName.inputView = pickerView
+        if FmItem?.color == "Red" {
+            radioController.buttonsArray = [Red,Green,Blue]
+            radioController.defaultButton = Red
+        } else if FmItem?.color == "Green" {
+            radioController.buttonsArray = [Red,Green,Blue]
+            radioController.defaultButton = Green
+        } else {
+            radioController.buttonsArray = [Red,Green,Blue]
+            radioController.defaultButton = Blue
+        }
         
         self.saveItems()
     }
@@ -98,9 +95,7 @@ class EditItemViewController: UIViewController,UITextFieldDelegate {
     }
     
     @IBAction func saveEdit(_ sender: UIButton) {
-//        let editItem = Item(context: self.context)
 
-//        print(editItem)
         FmItem!.title = itemName?.text!
         FmItem!.parentCategory? = selectedCategory!
         FmItem!.color = selectedColor!

@@ -8,15 +8,10 @@
 
 import UIKit
 import CoreData
-import Foundation
 
 
 class CreateItemViewController: UIViewController, UITextFieldDelegate {
     
-    var iName: String?
-    var cName: String?
-    var dName: String?
-    var color: String?
     
     @IBOutlet weak var itemName: UITextField!
     @IBOutlet weak var CategoryName: UITextField!
@@ -35,7 +30,6 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate {
     var selectedColor: String?
     var strDate: Date?
     
-    var isUpdated: Bool?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,36 +39,13 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate {
         radioController.buttonsArray = [Red,Green,Blue]
         radioController.defaultButton = Red
         
-//        if isUpdated == true {
-//
-//            itemName.text = iName!
-//            CategoryName.text = cName!
-//
-//            if color == "Red" {
-//                radioController.buttonsArray = [Red,Green,Blue]
-//                radioController.defaultButton = Red
-//            } else if color == "Green" {
-//                radioController.buttonsArray = [Red,Green,Blue]
-//                radioController.defaultButton = Green
-//            } else {
-//                radioController.buttonsArray = [Red,Green,Blue]
-//                radioController.defaultButton = Blue
-//            }
-//
-//        } else {
-//            radioController.buttonsArray = [Red,Green,Blue]
-//            radioController.defaultButton = Red
-//        }
-        
     }
     
     func loadCategories(){
         let request: NSFetchRequest<Category> = Category.fetchRequest()
         do{
             categoriesDB = try context.fetch(request)
-            //            for category in categoriesDB {
-            //                categories.append(category)
-            //            }
+            
         }catch{
             print("Error")
         }
@@ -84,80 +55,44 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func datePickerChanged(_ sender: Any) {
         let dateFormatter = ISO8601DateFormatter()
-        
-//        dateFormatter.dateStyle = DateFormatter.Style.short
-//        dateFormatter.timeStyle = DateFormatter.Style.short
-        
         self.strDate = datePicker.date
-        //        print(strDate)
     }
     //radios start
     @IBAction func btnRedAction(_ sender: UIButton) {
         radioController.buttonArrayUpdated(buttonSelected: sender)
         selectedColor = "Red"
-        
-        //        print(selectedColor)
     }
     @IBAction func btnGreenAction(_ sender: UIButton) {
         radioController.buttonArrayUpdated(buttonSelected: sender)
         selectedColor = "Green"
-        //        print(selectedColor)
     }
     @IBAction func btnBlueAction(_ sender: UIButton) {
         radioController.buttonArrayUpdated(buttonSelected: sender)
         selectedColor = "Blue"
-        //        print(selectedColor)
     }
-    //radios end
     
     
     
     @IBAction func createButton(_ sender: UIButton) {
         
-        if isUpdated == true {
-            let newItem = Item(context: self.context)
-            newItem.title = itemName?.text!
-            newItem.parentCategory? = selectedCategory!
-            newItem.color = selectedColor!
-            newItem.date = strDate!
-            newItem.done = false
-            do{
-                try context.save()
-            }catch{
-                print("Error")
-            }
-        } else {
-            let newItem = Item(context: self.context)
-            newItem.title = itemName?.text!
-            newItem.parentCategory = selectedCategory!
-            newItem.color = selectedColor!
-            newItem.date = strDate!
-            newItem.done = false
-            do{
-                try context.save()
-            }catch{
-                print("Error")
-            }
-            
-            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CategoryTableViewController") as? CategoryTableViewController
-            navigationController?.pushViewController(vc!, animated: true)
-            
+        let newItem = Item(context: self.context)
+        newItem.title = itemName?.text!
+        newItem.parentCategory = selectedCategory!
+        newItem.color = selectedColor ?? "Red"
+        newItem.date = self.strDate!
+        newItem.done = false
+        do{
+            try context.save()
+        }catch{
+            print("Error")
         }
-        
-        
-        
-        
-        
-        
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CategoryTableViewController") as? CategoryTableViewController
+        navigationController?.pushViewController(vc!, animated: true)
         
     }
     func saveItems(){
-        //        let encoder  = PropertyListEncoder()
         do{
             try context.save()
-            
-            //            let data = try encoder.encode(itemArray)
-            //            try data.write(to: dataFilePath!)
         }catch{
             
             print("Error")
